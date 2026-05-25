@@ -9,8 +9,9 @@ use App\Models\Member;
 use App\Models\ActiveCode;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
+use Session;
 
-class LoginController extends AuthController
+class   LoginController extends AuthController
 {
     public function showLogin()
     {
@@ -20,38 +21,31 @@ class LoginController extends AuthController
     public function doLogin(Request $request)
     {
         $request->validate([
-            'mobile' => ['required', 'regex:/^09[0-9]{9}$/']
+            'email' => ['required', 'email', 'exists:users,email'],
         ]);
 
-        $mobile = $request->mobile;
-
-        $user = User::where('mobile', $mobile)->first();
-
-        $code = rand(100000, 999999);
-
-        ActiveCode::create([
-            'mobile'     => $mobile,
-            'code'       => $code,
-            'expires_at' => now()->addMinutes(2),
-        ]);
-
-        // send sms here
+        $user = User::where('email', $request->email)->first();
 
         if (!$user) {
+            return back()->withErrors([
+                'email' => 'کاربری با این ایمیل یافت نشد.'
+            ]);
+        }
+
+        if ($user->email_verified_at) {
+
+            Auth::login($user, true);
+
+            $request->session()->regenerate();
 
             return redirect()
-                ->route('auth.register')
-                ->with([
-                    'mobile' => $mobile,
-                    'code'   => $code
-                ]);
+                ->route('front.user.profile');
         }
 
         return redirect()
-            ->route('auth.verify')
-            ->with([
-                'mobile' => $mobile,
-                'code'   => $code
+            ->route('front.auth.login')
+            ->withErrors([
+                'email' => 'ایمیل کاربر تایید نشده است.'
             ]);
     }
 

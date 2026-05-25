@@ -27,22 +27,12 @@
                         </li>
                         <li class="side-nav-item">
                             <a href="/admin/products/create-simple" class="side-nav-link">
-                                <span class="menu-text">افزودن محصول تکی</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="/admin/products/create-print" class="side-nav-link">
                                 <span class="menu-text">افزودن محصول چاپی</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="/admin/products/print-options" class="side-nav-link">
-                                <span class="menu-text">تنظیمات فایل چاپی</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="/admin/products/seo" class="side-nav-link">
-                                <span class="menu-text">تنظیمات سئو محصولات</span>
+                            <a href="/admin/products/create-taki" class="side-nav-link">
+                                <span class="menu-text">افزودن محصول تکی</span>
                             </a>
                         </li>
                     </ul>

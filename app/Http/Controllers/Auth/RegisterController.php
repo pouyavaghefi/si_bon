@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Auth;
 use App\Models\ActiveCode;
 
 class RegisterController extends AuthController
@@ -17,40 +18,23 @@ class RegisterController extends AuthController
     public function doRegister(Request $request)
     {
         $request->validate([
-            'mobile' => ['required', 'digits:9'],
+            'email' => ['required', 'email:rfc,dns', 'unique:users,email'],
+        ], [
+            'email.required' => 'وارد کردن ایمیل الزامی است.',
+            'email.email' => 'فرمت ایمیل صحیح نیست.',
+            'email.unique' => 'این ایمیل قبلاً ثبت شده است.',
         ]);
 
-        $mobile = '09' . $request->mobile;
-
-        $userExists = User::where('mobile', $mobile)->exists();
-
-        if ($userExists) {
-            return back()->withErrors([
-                'mobile' => 'این شماره موبایل قبلاً ثبت شده است.',
-            ])->withInput();
-        }
-
-        $code = rand(11111, 99999);
-
-        ActiveCode::updateOrCreate(
-            [
-                'mobile' => $mobile,
-            ],
-            [
-                'code' => $code,
-                'used_at' => null,
-                'expires_at' => now()->addMinutes(2),
-            ]
-        );
-
-        session([
-            'auth_mobile' => $mobile,
+        $user = User::create([
+            'email' => $request->email,
+            'email_verified_at' => now(),
         ]);
 
-        // send sms here
+        Auth::login($user, true);
+
+        $request->session()->regenerate();
 
         return redirect()
-            ->route('auth.verify')
-            ->with('success', 'کد تایید برای شما ارسال شد.');
+            ->route('front.user.profile');
     }
 }

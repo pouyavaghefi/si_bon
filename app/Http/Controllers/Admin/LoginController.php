@@ -25,6 +25,15 @@ class LoginController extends Controller
 
         $this->ensureIsNotRateLimited($request);
 
+        if ($request->name !== 'root') {
+
+            RateLimiter::hit($this->throttleKey($request), 300);
+
+            return back()->withErrors([
+                'name' => 'Invalid credentials.',
+            ])->withInput();
+        }
+
         $credentials = [
             'name' => $request->name,
             'password' => $request->password,

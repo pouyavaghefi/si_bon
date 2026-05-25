@@ -42,5 +42,6 @@
 
 @include('admin.layouts.includes.init.js')
 
+@yield('scripts')
 </body>
 </html>

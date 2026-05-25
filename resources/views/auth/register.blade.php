@@ -37,11 +37,11 @@
             line-height: 1.9;
         }
 
-        .phone-field-wrapper {
+        .email-field-wrapper {
             margin-bottom: 18px;
         }
 
-        .phone-input-box {
+        .email-input-box {
             direction: ltr !important;
             display: flex !important;
             flex-direction: row !important;
@@ -54,34 +54,32 @@
             transition: .2s ease;
         }
 
-        .phone-input-box:focus-within {
+        .email-input-box:focus-within {
             border-color: #0f74a8;
             box-shadow: 0 0 0 3px rgba(15,116,168,.12);
         }
 
-        .phone-input-box.is-invalid {
+        .email-input-box.is-invalid {
             border: 2px solid #e53935;
             background: #fffafa;
             box-shadow: 0 0 0 3px rgba(229,57,53,.10);
         }
 
-        .phone-prefix {
+        .email-prefix {
             order: 1;
             width: 75px;
             height: 100%;
             border-right: 1px solid #ececec;
-            border-left: none;
             background: #f8f8f8;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 22px;
-            font-weight: 700;
             color: #222;
             flex-shrink: 0;
         }
 
-        .phone-input {
+        .email-input {
             order: 2;
             width: 100%;
             height: 100%;
@@ -90,12 +88,11 @@
             outline: none !important;
             direction: ltr !important;
             text-align: left !important;
-            font-size: 17px;
+            font-size: 16px;
             padding: 0 18px;
-            letter-spacing: 1px;
         }
 
-        .phone-input::placeholder {
+        .email-input::placeholder {
             color: #b8b8b8;
         }
 
@@ -222,27 +219,26 @@
                                                 </div>
                                             @endif
 
-                                            <div class="phone-field-wrapper">
-                                                <div class="phone-input-box @error('phone') is-invalid @enderror">
-                                                    <div class="phone-prefix">09</div>
+                                            <div class="email-field-wrapper">
+                                                <div class="email-input-box @error('email') is-invalid @enderror">
+                                                    <div class="email-prefix">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </div>
 
-                                                    <input type="text"
-                                                           name="mobile"
-                                                           id="phone"
-                                                           class="form-control phone-input"
-                                                           placeholder="912 123 4567"
-                                                           value="{{ old('phone') }}"
-                                                           minlength="9"
-                                                           maxlength="9"
-                                                           inputmode="numeric"
-                                                           autocomplete="off">
+                                                    <input type="email"
+                                                           name="email"
+                                                           id="email"
+                                                           class="form-control email-input"
+                                                           placeholder="example@gmail.com"
+                                                           value="{{ old('email') }}"
+                                                           autocomplete="email">
                                                 </div>
 
-                                                @error('phone')
+                                                @error('email')
                                                 <span class="field-error">
-                                                        <i class="fa fa-exclamation-triangle"></i>
-                                                        {{ $message }}
-                                                    </span>
+                                                    <i class="fa fa-exclamation-triangle"></i>
+                                                    {{ $message }}
+                                                </span>
                                                 @enderror
                                             </div>
 
@@ -277,7 +273,7 @@
                                                     ورود به حساب
                                                 </a>
 
-                                                <a href="{{ route('auth.forgot-password') }}">
+                                                <a href="#">
                                                     <i class="fa fa-lock"></i>
                                                     فراموشی رمز عبور
                                                 </a>
@@ -303,10 +299,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        $('#phone').on('input', function () {
-            this.value = this.value.replace(/\D/g, '').slice(0, 9);
-        });
-
         $('#register-form').on('submit', function () {
             $('#register-submit')
                 .addClass('is-loading')
@@ -323,7 +315,7 @@
                         <p>
                             اطلاعات کاربران نزد ${@json(config('app.name'))}
                             محفوظ بوده و صرفاً جهت پردازش سفارشات،
-                            ارسال پیامک و بهبود خدمات استفاده می‌شود.
+                            ارسال ایمیل و بهبود خدمات استفاده می‌شود.
                         </p>
                         <p>
                             اطلاعات شما به هیچ شخص یا مجموعه ثالثی

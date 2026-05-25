@@ -103,7 +103,6 @@
             align-items: center;
             justify-content: center;
             font-size: 21px;
-            font-weight: 700;
             color: #222;
             flex-shrink: 0;
         }
@@ -116,14 +115,12 @@
             outline: none !important;
             direction: ltr;
             text-align: left;
-            font-size: 17px;
+            font-size: 16px;
             padding: 0 16px;
-            letter-spacing: 1px;
         }
 
         .phone-input::placeholder {
             color: #b8b8b8;
-            letter-spacing: 0;
         }
 
         .field-error {
@@ -178,10 +175,6 @@
 
 @section('wrapper')
 
-    <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" class="logout-head" style="display:none;">
-        @csrf
-    </form>
-
     <div style="direction: ltr; top: 90px; margin-bottom: 120px; position: relative;"
          id="particles-js"
          class="main-form-box">
@@ -196,7 +189,7 @@
                             <div class="panel-heading" style="padding: 0 !important;">
                                 <div class="row" style="padding: 0; margin: 0;">
                                     <div class="col-lg-12 col-sm-12 col-xl-12" style="padding: 0; margin: 0;">
-                                        <span class="register-form-link" id="register-form-link">
+                                        <span class="register-form-link">
                                             ورود به حساب
                                         </span>
                                     </div>
@@ -213,7 +206,7 @@
                                               method="POST"
                                               role="form"
                                               class="login-form-clean"
-                                              style="display:block;-webkit-appearance:none;-moz-appearance:none;margin:0 10px;">
+                                              style="display:block;margin:0 10px;">
 
                                             @csrf
 
@@ -231,27 +224,27 @@
                                             @endif
 
                                             <div class="phone-field-wrapper">
-                                                <div class="phone-input-box @error('phone') is-invalid @enderror">
-                                                    <div class="phone-prefix">09</div>
+                                                <div class="phone-input-box @error('email') is-invalid @enderror">
 
-                                                    <input type="text"
-                                                           name="mobile"
-                                                           id="phone"
+                                                    <div class="phone-prefix">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </div>
+
+                                                    <input type="email"
+                                                           name="email"
+                                                           id="email"
                                                            tabindex="1"
                                                            class="form-control phone-input"
-                                                           placeholder="12 123 4567"
-                                                           value="{{ old('phone') }}"
-                                                           minlength="9"
-                                                           maxlength="9"
-                                                           inputmode="numeric"
-                                                           autocomplete="off">
+                                                           placeholder="example@gmail.com"
+                                                           value="{{ old('email') }}"
+                                                           autocomplete="email">
                                                 </div>
 
-                                                @error('phone')
+                                                @error('email')
                                                 <span class="field-error">
-                                                        <i class="fa fa-exclamation-triangle"></i>
-                                                        {{ $message }}
-                                                    </span>
+                                                    <i class="fa fa-exclamation-triangle"></i>
+                                                    {{ $message }}
+                                                </span>
                                                 @enderror
                                             </div>
 
@@ -280,7 +273,7 @@
                                                    id="login-submit"
                                                    tabindex="4"
                                                    class="form-control btn btn-login"
-                                                   value="ورود">
+                                                   value="ادامه">
 
                                             <div class="auth-links">
 
@@ -317,57 +310,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        $('#phone').on('input', function () {
-            this.value = this.value.replace(/\D/g, '').slice(0, 9);
-        });
-
         $('#login-form').on('submit', function () {
             $('#login-submit')
                 .addClass('is-loading')
                 .prop('disabled', true);
-        });
-
-        $('#privacy-policy-btn').on('click', function (e) {
-            e.preventDefault();
-
-            Swal.fire({
-                title: 'حریم خصوصی',
-                html: `
-                    <div style="direction:rtl;text-align:right;line-height:2;font-size:14px;">
-                        <p>
-                            اطلاعات کاربران نزد ${@json(config('app.name'))} محفوظ بوده و
-                            صرفاً جهت پردازش سفارشات، ارسال پیامک و بهبود خدمات استفاده می‌شود.
-                        </p>
-                        <p>
-                            اطلاعات شما به هیچ شخص یا مجموعه ثالثی فروخته یا منتقل نخواهد شد.
-                        </p>
-                        <p>
-                            با ثبت‌نام در سایت، شما با قوانین حفظ حریم خصوصی موافقت می‌نمایید.
-                        </p>
-                    </div>
-                `,
-                confirmButtonText: 'متوجه شدم',
-                confirmButtonColor: '#0f74a8',
-                width: 600
-            });
-        });
-
-        $('#terms-btn').on('click', function (e) {
-            e.preventDefault();
-
-            Swal.fire({
-                title: 'شرایط و قوانین',
-                html: `
-                    <div style="direction:rtl;text-align:right;line-height:2;font-size:14px;">
-                        <p>ثبت سفارش به منزله پذیرش قوانین سایت می‌باشد.</p>
-                        <p>زمان آماده‌سازی و تحویل سفارش بسته به نوع خدمات چاپ متغیر خواهد بود.</p>
-                        <p>مسئولیت صحت فایل‌های ارسالی بر عهده کاربر می‌باشد.</p>
-                    </div>
-                `,
-                confirmButtonText: 'متوجه شدم',
-                confirmButtonColor: '#0f74a8',
-                width: 600
-            });
         });
     </script>
 
