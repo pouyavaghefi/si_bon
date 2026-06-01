@@ -40,13 +40,15 @@ Route::prefix('/')
 
                 Route::post('/register', [RegisterController::class, 'doRegister'])
                     ->name('submit.register');
-
             });
 
         Route::middleware('auth')
             ->prefix('user')
             ->name('user.')
             ->group(function () {
+
+                Route::post('/addresses/store', [ProfileController::class, 'storeAddress'])
+                    ->name('addresses.store');
 
                 Route::get('/profile', [ProfileController::class, 'showProfile'])
                     ->name('profile');
@@ -62,6 +64,15 @@ Route::prefix('/')
 
                 Route::get('/orders', [ProfileController::class, 'allOrders'])
                     ->name('orders');
+
+                Route::get('/orders/{order}', [ProfileController::class, 'showOrder'])
+                    ->name('orders.show');
+
+                Route::get('/orders/{order}/payment', [ProfileController::class, 'orderPayment'])
+                    ->name('orders.payment');
+
+                Route::post('/orders/{order}/continue', [ProfileController::class, 'continueOrder'])
+                    ->name('orders.continue');
 
                 Route::get('/orders/new', [ProfileController::class, 'newOrders'])
                     ->name('orders.new');
@@ -95,29 +106,42 @@ Route::prefix('/')
 
                 Route::get('/password', [ProfileController::class, 'password'])
                     ->name('password');
-
             });
 
-        Route::post('/cart/add-taki', [CartsController::class, 'addTaki'])
-            ->name('cart.addTaki');
+        Route::prefix('cart')
+            ->name('cart.')
+            ->group(function () {
 
-        Route::post('/cart/add-print', [CartsController::class, 'addPrint'])
-            ->name('cart.addPrint');
+                Route::get('/', [CartsController::class, 'index'])
+                    ->name('index');
 
-        Route::get('/cart', [CartsController::class, 'index'])
-            ->name('cart.index');
+                Route::post('/add-taki', [CartsController::class, 'addTaki'])
+                    ->name('addTaki');
 
-        Route::post('/cart/add-taki', [CartsController::class, 'addTaki'])
-            ->name('cart.addTaki');
+                Route::post('/add-print', [CartsController::class, 'addPrint'])
+                    ->name('addPrint');
 
-        Route::post('/cart/add-print', [CartsController::class, 'addPrint'])
-            ->name('cart.addPrint');
+                Route::get('/edit/{key}', [CartsController::class, 'edit'])
+                    ->name('edit');
 
-        Route::delete('/cart/remove/{key}', [CartsController::class, 'remove'])
-            ->name('cart.remove');
+                Route::put('/update/{key}', [CartsController::class, 'update'])
+                    ->name('update');
 
-        Route::delete('/cart/clear', [CartsController::class, 'clear'])
-            ->name('cart.clear');
+                Route::delete('/remove/{key}', [CartsController::class, 'remove'])
+                    ->name('remove');
+
+                Route::delete('/clear', [CartsController::class, 'clear'])
+                    ->name('clear');
+            });
+
+        Route::get('/checkout', [CartsController::class, 'checkoutPage'])
+            ->name('checkout.index');
+
+        Route::post('/checkout', [CartsController::class, 'checkout'])
+            ->name('cart.checkout');
+
+        Route::get('/checkout/success/{order}', [CartsController::class, 'success'])
+            ->name('cart.success');
     });
 
 require __DIR__.'/auth.php';
